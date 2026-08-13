@@ -4,9 +4,7 @@
   font-family: "Cassey";
   /* Provide multiple formats and fallbacks. Ensure the actual files exist in the /fonts/ directory. */
   src: local("Cassey"),
-       url("/fonts/casseyfon.woff2") format("woff2"),
-       url("/fonts/casseyfon.woff") format("woff"),
-       url("/fonts/casseyfon.ttf") format("truetype");
+       url("/fonts/casseyfon.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -36,6 +34,16 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  /* prevent horizontal scrolling caused by overflowing children */
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* Make media elements responsive to avoid accidental overflow */
+img, svg, video, iframe {
+  max-width: 100%;
+  height: auto;
+  display: block;
 }
 
 button:not(:disabled),

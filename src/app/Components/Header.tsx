@@ -69,7 +69,7 @@ const Header = () => {
 
   return (
     <header
-      className={`w-screen left-0 px-8 z-100 ${isAtTop ? "absolute top-16" : "fixed top-8"}`}
+      className={`hidden md:block w-screen left-0 px-8 z-100 ${isAtTop ? "absolute top-16" : "fixed top-8"}`}
     >
       <div
         className={`flex w-full ml-auto px-8 py-4 justify-between transition-all duration-1000 ${
@@ -82,13 +82,13 @@ const Header = () => {
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         >
           <img
-            className="h-12"
+            className="lg:w-64 w-48"
             src="/voz_nomada.svg"
             alt="La voz nómada de Canarias"
           />
         </button>
 
-        <div className="inline-flex gap-12">
+        <div className="inline-flex gap-4 lg:gap-12">
           <button type="button" onClick={() => ScrollTo("about")}>
             <p className="header-button">la liña</p>
           </button>

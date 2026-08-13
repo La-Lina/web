@@ -9,9 +9,11 @@ import EditableMedia from "../Components/admin/EditableMedia";
 function TextBlock({
   children,
   targetRef,
+  className,
 }: {
   children: React.ReactNode;
   targetRef: React.RefObject<HTMLDivElement | null>;
+  className?: string;
 }) {
   const { scrollYProgress } = useScroll({
     target: targetRef,
@@ -23,7 +25,7 @@ function TextBlock({
   const filter = useTransform(blurValue, (v) => `blur(${v}px)`);
 
   return (
-    <motion.div style={{ opacity, filter }} className="flex flex-col z-10 relative">
+    <motion.div style={{ opacity, filter }} className={`flex flex-col z-10 relative ${className ?? ""}`}>
       {children}
     </motion.div>
   );
@@ -61,7 +63,7 @@ function AnimatedMediaBlock({
   return (
     // Este motion.div maneja el fade-in y el brillo por scroll
     <motion.div
-      className={`rounded-sm shadow-xl ${className}`}
+      className={`shadow-xl ${className}`}
       style={{ opacity: scrollOpacity, filter: scrollFilter }}
     >
       {/* Aquí inyectamos el componente genérico con todas sus herramientas */}
@@ -72,7 +74,7 @@ function AnimatedMediaBlock({
         initialPosY={initialPosY}
         initialZoom={initialZoom}
         initialBrightness={initialBrightness}
-        className="w-full h-full aspect-[3/4]" // Le pasamos el aspect-ratio para que respete el formato vertical
+        className="w-full h-full aspect-[3/4]"
       />
     </motion.div>
   );
@@ -95,40 +97,40 @@ export default function About({
   return (
     <section className="w-full text-primary">
       {/* LEFT */}
-      <div ref={left} className="h-screen flex items-center justify-start px-20 gap-4 relative">
+      <div ref={left} className="h-screen flex items-center justify-start px-4 md:px-20 gap-4 relative">
         <AnimatedMediaBlock
-          initialSrc={initialLeftImg} uploadType="aboutLeftImage" className="w-104" targetRef={left}
+          initialSrc={initialLeftImg} uploadType="aboutLeftImage" className="w-50 md:w-104" targetRef={left}
           initialPosX={leftX} initialPosY={leftY} initialZoom={leftZoom} initialBrightness={leftBrightness}
         />
-        <TextBlock targetRef={left}>
-          <p className="bonito text-3xl whitespace-nowrap">has llegado a un espacio de</p>
-          <p className="gordo text-4xl">escucha <br /> reflexión <br /> y diálogo</p>
+        <TextBlock targetRef={left} className="-translate-x-12 p-2 pr-0 rounded-xl bg-white md:p-0 md:bg-none md:rounded-none md:translate-x-0">
+          <p className="bonito text-xl md:text-3xl md:whitespace-nowrap">has llegado a un espacio de</p>
+          <p className="gordo text-2xl md:text-4xl">escucha <br /> reflexión <br /> y diálogo</p>
         </TextBlock>
       </div>
 
       {/* MIDDLE */}
       <div ref={mid} className="h-screen flex items-center justify-center gap-4 relative">
-        <TextBlock targetRef={mid}>
-          <p className="bonito text-3xl whitespace-nowrap text-right">donde distintos <br /> roces comparten</p>
-          <p className="gordo text-4xl text-right">experiencias <br /> miradas <br /> y preguntas</p>
+        <TextBlock targetRef={mid} className="bg-white translate-x-8 rounded-xl p-2 pl-0 md:p-0 md:bg-none md:rounded-none md:translate-x-0 ">
+          <p className="bonito text-xl md:text-3xl whitespace-nowrap text-right">donde distintos <br /> roces comparten</p>
+          <p className="gordo text-2xl md:text-4xl text-right">experiencias <br /> miradas <br /> y preguntas</p>
         </TextBlock>
         <AnimatedMediaBlock
-          initialSrc={initialMidImg} uploadType="aboutMidImage" className="w-112" targetRef={mid}
+          initialSrc={initialMidImg} uploadType="aboutMidImage" className="w-50 md:w-112" targetRef={mid}
           initialPosX={midX} initialPosY={midY} initialZoom={midZoom} initialBrightness={midBrightness}
         />
       </div>
 
       {/* RIGHT */}
-      <div ref={right} className="h-screen flex items-center justify-end px-20 relative">
+      <div ref={right} className="h-screen flex items-center justify-center md:justify-end md:px-20 relative">
         <div className="text-right flex flex-col items-end">
           <AnimatedMediaBlock
-            initialSrc={initialRightImg} uploadType="aboutRightImage" className="w-96" targetRef={right}
+            initialSrc={initialRightImg} uploadType="aboutRightImage" className="w-64 md:w-96" targetRef={right}
             initialPosX={rightX} initialPosY={rightY} initialZoom={rightZoom} initialBrightness={rightBrightness}
           />
           <TextBlock targetRef={right}>
-            <p className="bonito text-3xl">sobre el</p>
-            <p className="gordo text-4xl">presente</p>
-            <p className="bonito text-3xl">que estamos viviendo <br /> y de dónde partimos</p>
+            <p className="bonito text-2xl md:text-3xl">sobre el</p>
+            <p className="gordo text-3xl md:text-4xl">presente</p>
+            <p className="bonito text-2xl md:text-3xl">que estamos viviendo <br /> y de dónde partimos</p>
           </TextBlock>
         </div>
       </div>

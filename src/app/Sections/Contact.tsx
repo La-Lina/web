@@ -31,7 +31,7 @@ const Contact = () => {
   return (
     <motion.section
       id="contact"
-      className="flex items-end justify-center my-32 gap-12"
+      className="flex flex-col md:flex-row items-center md:items-end justify-center my-32 gap-12"
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"

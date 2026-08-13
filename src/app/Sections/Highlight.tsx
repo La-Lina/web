@@ -133,16 +133,18 @@ const Highlight = ({ mediaData = {} }: HighlightProps) => {
       )}
 
       {/* CONTENEDOR DE LOS TEXTOS (z-10 y pointer-events-none para no bloquear el drag del fondo) */}
-      <div className="absolute inset-0 z-10 flex flex-col justify-between pl-24 py-12 text-white pointer-events-none">
+      <div className="absolute inset-0 z-10 flex flex-col justify-end gap-4 md:justify-between px-8 md:pl-24 py-12 text-white pointer-events-none">
         {/** DATE */}
         <motion.p
           variants={faderInLeft}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.5 }}
-          className="text-9xl font-courier-prime"
+          className="text-4xl md:text-9xl font-courier-prime"
         >
-          {String(day).padStart(2, "0")}/ <br />{" "}
+          <span className="inline md:block">
+            {String(day).padStart(2, "0")}/
+          </span>
           {String(month).padStart(2, "0")}
         </motion.p>
 
@@ -156,11 +158,13 @@ const Highlight = ({ mediaData = {} }: HighlightProps) => {
         >
           {/* Asegúrate de que este SVG sea de color blanco o claro para que contraste con el fondo oscuro */}
           <img
-            className="w-auto h-12 mb-4 drop-shadow-lg"
+            className="h-auto w-3/4 md:w-auto mb-6 drop-shadow-lg"
             src="/podcast.svg"
             alt="PODCAST"
           />
-          <h4 className="text-8xl w-1/2 drop-shadow-xl uppercase">{title}</h4>
+          <h4 className="text-5xl md:text-8xl md:w-1/2 drop-shadow-xl uppercase">
+            {title}
+          </h4>
         </motion.div>
       </div>
     </section>
