@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { getServerSession } from "next-auth/next";
@@ -24,10 +24,11 @@ export const metadata: Metadata = {
   },
 };
 
-export const viewport = {
+export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  viewportFit: "cover",
+  viewportFit: "cover", // Permite extenderse tras el notch y la barra inferior
+  themeColor: "#ffffff", // Tiñe la barra de estado y los controles de Safari
 };
 
 export default async function RootLayout({
@@ -42,7 +43,7 @@ export default async function RootLayout({
   return (
     <html
       lang="es"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} min-h-dvh bg-white antialiased`}
     >
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
