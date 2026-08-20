@@ -62,7 +62,7 @@ const Highlight = ({ mediaData = {} }: HighlightProps) => {
       {/* Le ponemos z-0 para que quede detrás, y brightness bajo por defecto para que el texto se lea bien */}
       <EditableMedia
         uploadType="highlightBg"
-        initialSrc={mediaData?.highlightBg_src || "/default-video.mp4"}
+        initialSrc={mediaData?.highlightBg_src || ""}
         initialPosX={mediaData?.highlightBg_posX ?? 50}
         initialPosY={mediaData?.highlightBg_posY ?? 50}
         initialZoom={mediaData?.highlightBg_zoom ?? 1}

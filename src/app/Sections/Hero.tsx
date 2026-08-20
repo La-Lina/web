@@ -7,7 +7,7 @@ const Hero = ({ mediaData = {} }: { mediaData?: any }) => {
       <EditableMedia
         uploadType="hero"
         // 2. Añadimos la interrogación (?) para evitar errores
-        initialSrc={mediaData?.hero_src || "/default-video.mp4"}
+        initialSrc={mediaData?.hero_src || ""}
         initialPosX={mediaData?.hero_posX}
         initialPosY={mediaData?.hero_posY}
         initialZoom={mediaData?.hero_zoom}

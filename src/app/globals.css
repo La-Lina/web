@@ -43,9 +43,6 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
-  /* prevent horizontal scrolling caused by overflowing children */
-  overflow-x: hidden;
-  max-width: 100vw;
 }
 
 /* Make media elements responsive to avoid accidental overflow */

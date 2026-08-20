@@ -119,7 +119,8 @@ export default function EditableMedia({
 
     const totalWidth = parseFloat(renderWidth) * zoom;
     const totalHeight = parseFloat(renderHeight) * zoom;
-    maxShiftX = Math.max(0, (totalWidth - containerWidth) / 2);maxShiftY = Math.max(0, (totalHeight - containerHeight) / 2);
+    maxShiftX = Math.max(0, (totalWidth - containerWidth) / 2);
+    maxShiftY = Math.max(0, (totalHeight - containerHeight) / 2);
 
     translateX = ((posX - 50) / 50) * maxShiftX;
     translateY = ((posY - 50) / 50) * maxShiftY;
@@ -151,11 +152,13 @@ export default function EditableMedia({
   };
 
   return (
-    <div ref={containerRef} className={`relative group select-none ${className}`}>
-      
+    <div
+      ref={containerRef}
+      className={`relative group select-none ${className}`}
+    >
       {/* BOTONES DE ACCIÓN */}
       {isAdmin && (
-        <div 
+        <div
           className={`absolute bottom-2 right-2 z-50 flex gap-2 transition-opacity duration-300 
             ${showPanel || isDirty ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`}
         >
@@ -172,12 +175,13 @@ export default function EditableMedia({
 
           {/* BOTÓN GUARDAR */}
           <button
-            onClick={handleSaveAll} 
+            onClick={handleSaveAll}
             disabled={isSaving || !isDirty}
             className={`p-2 rounded-full shadow-md transition-all border border-white/20 text-sm flex items-center justify-center w-8 h-8 
-              ${!isDirty 
-                ? "bg-black/40 text-gray-400 cursor-not-allowed" 
-                : "bg-black/80 hover:bg-black text-white"
+              ${
+                !isDirty
+                  ? "bg-black/40 text-gray-400 cursor-not-allowed"
+                  : "bg-black/80 hover:bg-black text-white"
               }`}
             title="Guardar"
           >
@@ -196,7 +200,11 @@ export default function EditableMedia({
             className="bg-black/80 hover:bg-black text-white p-2 rounded-full shadow-md transition-all border border-white/20 text-sm flex items-center justify-center w-8 h-8"
             title="Ajustes"
           >
-            {showPanel ? <X className="w-4 h-4" /> : <Settings className="w-4 h-4" />}
+            {showPanel ? (
+              <X className="w-4 h-4" />
+            ) : (
+              <Settings className="w-4 h-4" />
+            )}
           </button>
         </div>
       )}
@@ -212,7 +220,11 @@ export default function EditableMedia({
               <span className="text-gray-400">{zoom.toFixed(1)}x</span>
             </div>
             <input
-              type="range" min="1" max="3" step="0.1" value={zoom}
+              type="range"
+              min="1"
+              max="3"
+              step="0.1"
+              value={zoom}
               onChange={(e) => setZoom(parseFloat(e.target.value))}
               className="w-full cursor-pointer accent-white"
             />
@@ -223,7 +235,11 @@ export default function EditableMedia({
               <span className="text-gray-400">{brightness.toFixed(1)}</span>
             </div>
             <input
-              type="range" min="0" max="1" step="0.1" value={brightness}
+              type="range"
+              min="0"
+              max="1"
+              step="0.1"
+              value={brightness}
               onChange={(e) => setBrightness(parseFloat(e.target.value))}
               className="w-full cursor-pointer accent-white"
             />
@@ -270,19 +286,35 @@ export default function EditableMedia({
             }
           }}
         >
-          {isVideo ? (
-            <motion.video
-              src={src} autoPlay muted loop playsInline
-              onLoadedMetadata={(e) => setMediaAspect(e.currentTarget.videoWidth / e.currentTarget.videoHeight)}
-              className="w-full h-full object-fill pointer-events-none"
-            />
-          ) : (
-            <motion.img
-              src={src} draggable={false}
-              onLoad={(e) => setMediaAspect(e.currentTarget.naturalWidth / e.currentTarget.naturalHeight)}
-              className="w-full h-full object-fill pointer-events-none select-none"
-            />
-          )}
+          {src ? (
+            isVideo ? (
+              <motion.video
+                src={src}
+                autoPlay
+                muted
+                loop
+                playsInline
+                onLoadedMetadata={(e) =>
+                  setMediaAspect(
+                    e.currentTarget.videoWidth / e.currentTarget.videoHeight,
+                  )
+                }
+                className="w-full h-full object-fill pointer-events-none"
+              />
+            ) : (
+              <motion.img
+                src={src}
+                draggable={false}
+                onLoad={(e) =>
+                  setMediaAspect(
+                    e.currentTarget.naturalWidth /
+                      e.currentTarget.naturalHeight,
+                  )
+                }
+                className="w-full h-full object-fill pointer-events-none select-none"
+              />
+            )
+          ) : null}
         </motion.div>
       </div>
     </div>
