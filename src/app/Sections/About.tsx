@@ -95,42 +95,63 @@ export default function About({
   const right = useRef<HTMLDivElement | null>(null);
 
   return (
-    <section className="w-full text-primary">
+    <section className="w-full md:px-12 lg:px-20 text-primary space-y-24 py-16">
       {/* LEFT */}
-      <div ref={left} className="h-screen flex items-center justify-start px-4 md:px-20 gap-4 relative">
+      <div
+        ref={left}
+        className="h-auto flex flex-row items-center justify-center md:justify-start
+        gap-2 md:gap-6 relative"
+      >
         <AnimatedMediaBlock
-          initialSrc={initialLeftImg} uploadType="aboutLeftImage" className="w-50 md:w-104" targetRef={left}
+          initialSrc={initialLeftImg} uploadType="aboutLeftImage"
+          className="w-44 sm:w-58 md:w-72 lg:w-80" targetRef={left}
           initialPosX={leftX} initialPosY={leftY} initialZoom={leftZoom} initialBrightness={leftBrightness}
         />
-        <TextBlock targetRef={left} className="-translate-x-12 p-2 pr-0 rounded-xl bg-white md:p-0 md:bg-none md:rounded-none md:translate-x-0">
-          <p className="bonito text-xl md:text-3xl md:whitespace-nowrap">has llegado a un espacio de</p>
-          <p className="gordo text-2xl md:text-4xl">escucha <br /> reflexión <br /> y diálogo</p>
+        <TextBlock
+          targetRef={left}
+          className="text-left p-3 rounded-xl bg-transparent md:p-0 md:rounded-none"
+        >
+          <p className="bonito text-lg sm:text-xl md:text-2xl lg:text-3xl md:whitespace-nowrap">has llegado a un espacio de</p>
+          <p className="gordo text-2xl md:text-3xl lg:text-4xl">escucha <br /> reflexión <br /> y diálogo</p>
         </TextBlock>
       </div>
 
       {/* MIDDLE */}
-      <div ref={mid} className="h-screen flex items-center justify-center gap-4 relative">
-        <TextBlock targetRef={mid} className="bg-white translate-x-8 rounded-xl p-2 pl-0 md:p-0 md:bg-none md:rounded-none md:translate-x-0 ">
-          <p className="bonito text-xl md:text-3xl whitespace-nowrap text-right">donde distintos <br /> roces comparten</p>
-          <p className="gordo text-2xl md:text-4xl text-right">experiencias <br /> miradas <br /> y preguntas</p>
+      <div
+        ref={mid}
+        className="h-auto  flex flex-row items-center justify-center
+        gap-2 md:gap-6 relative px-6 sm:px-10 md:px-0 md:-translate-x-8"
+      >
+        <TextBlock
+          targetRef={mid}
+          className="text-right p-3 rounded-xl bg-transparent md:p-0 md:rounded-none"
+        >
+          <p className="bonito text-lg sm:text-xl md:text-2xl lg:text-3xl md:whitespace-nowrap">donde distintos <br /> roces comparten</p>
+          <p className="gordo text-2xl md:text-3xl lg:text-4xl">experiencias <br /> miradas <br /> y preguntas</p>
         </TextBlock>
         <AnimatedMediaBlock
-          initialSrc={initialMidImg} uploadType="aboutMidImage" className="w-50 md:w-112" targetRef={mid}
+          initialSrc={initialMidImg} uploadType="aboutMidImage"
+          className="w-44 sm:w-58 md:w-72 lg:w-80" targetRef={mid}
           initialPosX={midX} initialPosY={midY} initialZoom={midZoom} initialBrightness={midBrightness}
         />
       </div>
 
       {/* RIGHT */}
-      <div ref={right} className="h-screen flex items-center justify-center md:justify-end md:px-20 relative">
-        <div className="text-right flex flex-col items-end">
+      <div
+        ref={right}
+        className="h-auto flex items-center justify-center md:justify-end
+        px-6 sm:px-10 md:px-10 lg:px-20 relative py-16 md:py-0"
+      >
+        <div className="text-left md:text-right flex flex-row md:flex-col items-end gap-2">
           <AnimatedMediaBlock
-            initialSrc={initialRightImg} uploadType="aboutRightImage" className="w-64 md:w-96" targetRef={right}
+            initialSrc={initialRightImg} uploadType="aboutRightImage"
+            className="w-48 sm:w-60 md:w-72 lg:w-72" targetRef={right}
             initialPosX={rightX} initialPosY={rightY} initialZoom={rightZoom} initialBrightness={rightBrightness}
           />
           <TextBlock targetRef={right}>
-            <p className="bonito text-2xl md:text-3xl">sobre el</p>
-            <p className="gordo text-3xl md:text-4xl">presente</p>
-            <p className="bonito text-2xl md:text-3xl">que estamos viviendo <br /> y de dónde partimos</p>
+            <p className="bonito text-lg sm:text-xl md:text-2xl lg:text-3xl">sobre el</p>
+            <p className="gordo text-2xl sm:text-3xl md:text-3xl lg:text-4xl">presente</p>
+            <p className="bonito text-lg sm:text-xl md:text-2xl lg:text-3xl">que estamos viviendo <br /> y de dónde partimos</p>
           </TextBlock>
         </div>
       </div>

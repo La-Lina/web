@@ -88,7 +88,7 @@ const Header = () => {
           />
         </button>
 
-        <div className="inline-flex gap-4 lg:gap-12">
+        <div className="inline-flex gap-6 lg:gap-12">
           <button type="button" onClick={() => ScrollTo("about")}>
             <p className="header-button">la liña</p>
           </button>

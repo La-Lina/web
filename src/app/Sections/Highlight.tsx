@@ -56,7 +56,7 @@ const Highlight = ({ mediaData = {} }: HighlightProps) => {
   return (
     <section
       id="highlight"
-      className="relative h-screen w-full overflow-hidden bg-black"
+      className="relative h-[90dvh] md:h-screen w-full overflow-hidden bg-black"
     >
       {/* FONDO EDITABLE (Vídeo o Imagen) */}
       {/* Le ponemos z-0 para que quede detrás, y brightness bajo por defecto para que el texto se lea bien */}
@@ -72,10 +72,10 @@ const Highlight = ({ mediaData = {} }: HighlightProps) => {
 
       {/* PANEL DE EDICIÓN DE TEXTOS (Solo Admin) */}
       {isAdmin && (
-        <div className="absolute top-4 left-28 z-50">
+        <div className="absolute top-4 left-4 sm:left-16 md:left-28 z-50">
           <button
             onClick={() => setShowTextEditor(!showTextEditor)}
-            className="bg-white/10 hover:bg-white/20 text-white backdrop-blur-md border border-white/20 px-4 py-2 rounded-full text-xs font-bold transition-all shadow-lg flex items-center gap-2"
+            className="bg-white/10 hover:bg-white/20 text-white backdrop-blur-md border border-white/20 px-3 sm:px-4 py-2 rounded-full text-[10px] sm:text-xs font-bold transition-all shadow-lg flex items-center gap-2"
           >
             {showTextEditor ? (
               <X className="w-4 h-4" />
@@ -88,7 +88,7 @@ const Highlight = ({ mediaData = {} }: HighlightProps) => {
           </button>
 
           {showTextEditor && (
-            <div className="mt-2 flex flex-col gap-3 bg-black/95 p-5 rounded-xl shadow-2xl backdrop-blur-md border border-white/20 w-64 text-white text-xs animate-in fade-in slide-in-from-top-2 duration-200">
+            <div className="mt-2 flex flex-col gap-3 bg-black/95 p-5 rounded-xl shadow-2xl backdrop-blur-md border border-white/20 w-56 sm:w-64 text-white text-xs animate-in fade-in slide-in-from-top-2 duration-200">
               <div className="flex gap-2">
                 <div className="flex flex-col gap-1 w-1/2">
                   <label className="text-gray-400">Día</label>
@@ -133,14 +133,14 @@ const Highlight = ({ mediaData = {} }: HighlightProps) => {
       )}
 
       {/* CONTENEDOR DE LOS TEXTOS (z-10 y pointer-events-none para no bloquear el drag del fondo) */}
-      <div className="absolute inset-0 z-10 flex flex-col justify-end gap-4 md:justify-between px-8 md:pl-24 py-12 text-white pointer-events-none">
+      <div className="absolute inset-0 z-10 flex flex-col justify-end gap-4 md:justify-between px-6 sm:px-8 md:pl-16 lg:pl-24 md:pr-8 py-8 sm:py-10 md:py-12 text-white pointer-events-none">
         {/** DATE */}
         <motion.p
           variants={faderInLeft}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.5 }}
-          className="text-4xl md:text-9xl font-courier-prime"
+          className="text-4xl sm:text-5xl md:text-7xl lg:text-9xl font-courier-prime"
         >
           <span className="inline md:block">
             {String(day).padStart(2, "0")}/
@@ -158,11 +158,11 @@ const Highlight = ({ mediaData = {} }: HighlightProps) => {
         >
           {/* Asegúrate de que este SVG sea de color blanco o claro para que contraste con el fondo oscuro */}
           <img
-            className="h-auto w-3/4 md:w-auto mb-6 drop-shadow-lg"
+            className="h-auto w-3/4 sm:w-2/3 md:w-1/2 lg:w-auto mb-4 sm:mb-6 drop-shadow-lg"
             src="/podcast.svg"
             alt="PODCAST"
           />
-          <h4 className="text-5xl md:text-8xl md:w-1/2 drop-shadow-xl uppercase">
+          <h4 className="text-3xl sm:text-4xl md:text-6xl lg:text-8xl md:w-2/3 lg:w-1/2 drop-shadow-xl uppercase">
             {title}
           </h4>
         </motion.div>

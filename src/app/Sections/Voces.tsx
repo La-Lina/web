@@ -179,13 +179,21 @@ export default function Voces({ mediaData = {} }: { mediaData?: any }) {
     return "D";
   };
 
+  // Offsets responsivos: se reducen en móvil/tablet para que las tarjetas
+  // no exijan tanta altura de scroll vertical, y crecen hasta el valor
+  // original a partir de md (tablet) / lg (desktop).
   const getCardStyles = (template: string) => {
     switch (template) {
-      case "A": return "translate-y-28 pr-8 pt-4"; 
-      case "B": return "translate-y-12 pl-8 pt-32"; 
-      case "C": return "self-end pr-8 pt-40"; 
-      case "D": return "pl-8 pt-4"; 
-      default: return "";
+      case "A":
+        return "translate-y-10 sm:translate-y-16 md:translate-y-20 lg:translate-y-28 pr-4 sm:pr-6 md:pr-8 pt-2 sm:pt-3 md:pt-4";
+      case "B":
+        return "translate-y-4 sm:translate-y-8 md:translate-y-10 lg:translate-y-12 pl-4 sm:pl-6 md:pl-8 pt-10 sm:pt-16 md:pt-24 lg:pt-32";
+      case "C":
+        return "self-end pr-4 sm:pr-6 md:pr-8 pt-16 sm:pt-24 md:pt-32 lg:pt-40";
+      case "D":
+        return "pl-4 sm:pl-6 md:pl-8 pt-2 sm:pt-3 md:pt-4";
+      default:
+        return "";
     }
   };
 
@@ -193,7 +201,7 @@ export default function Voces({ mediaData = {} }: { mediaData?: any }) {
     <>
       <section
         id="voces"
-        className="py-8 mb-20 gap-8 flex flex-col items-center overflow-hidden w-full relative"
+        className="py-8 mb-12 md:mb-20 gap-6 md:gap-8 flex flex-col items-center overflow-hidden w-full relative"
       >
         {/* DIVISOR SUPERIOR */}
         <motion.div
@@ -201,7 +209,7 @@ export default function Voces({ mediaData = {} }: { mediaData?: any }) {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="w-4/9 h-[5px] bg-gray-300"
+          className="w-2/3 sm:w-1/2 md:w-4/9 h-[3px] sm:h-[5px] bg-gray-300"
         />
         
         {/* TÍTULO */}
@@ -211,19 +219,19 @@ export default function Voces({ mediaData = {} }: { mediaData?: any }) {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.8, delay: 0.15, ease: "easeOut" }}
-            className="font-courier-prime font-bold text-4xl"
+            className="font-courier-prime font-bold text-2xl sm:text-3xl md:text-4xl"
           >
             VOCES
           </motion.h3>
 
           {isAdmin && (
-            <div className="flex gap-2 animate-in fade-in zoom-in duration-300">
+            <div className="flex gap-2 flex-wrap justify-center animate-in fade-in zoom-in duration-300">
               <button
                 onClick={() => {
                   if (isEditMode) saveVocesListToDB(voces);
                   setIsEditMode(!isEditMode);
                 }}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full font-bold text-xs uppercase tracking-wider transition-all shadow-md border ${
+                className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full font-bold text-[10px] sm:text-xs uppercase tracking-wider transition-all shadow-md border ${
                   isEditMode 
                     ? "bg-green-600 hover:bg-green-700 text-white border-green-500" 
                     : "bg-white/10 hover:bg-white/20 text-black backdrop-blur-md border-black/20"
@@ -235,7 +243,7 @@ export default function Voces({ mediaData = {} }: { mediaData?: any }) {
               {isEditMode && (
                 <button
                   onClick={() => setShowAddModal(true)}
-                  className="flex items-center gap-2 px-4 py-2 rounded-full font-bold text-xs uppercase tracking-wider transition-all bg-black hover:bg-gray-800 text-white shadow-md border border-gray-700"
+                  className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full font-bold text-[10px] sm:text-xs uppercase tracking-wider transition-all bg-black hover:bg-gray-800 text-white shadow-md border border-gray-700"
                 >
                   <Plus className="w-4 h-4" /> Añadir Voz
                 </button>
@@ -245,13 +253,13 @@ export default function Voces({ mediaData = {} }: { mediaData?: any }) {
         </div>
 
         {/* CONTENEDOR VOCES */}
-        <div className="relative w-full max-w-9/10 mt-8">
+        <div className="relative w-full max-w-full sm:max-w-9/10 mt-6 md:mt-8">
           {canScrollLeft && (
             <button
               onClick={() => scrollByAmount(-400)}
-              className="absolute -left-8 top-1/2 -translate-y-1/2 z-40 bg-black/50 hover:bg-black text-white p-3 rounded-full backdrop-blur-md transition-all active:scale-95"
+              className="absolute left-1 sm:-left-2 md:-left-8 top-1/2 -translate-y-1/2 z-40 bg-black/50 hover:bg-black text-white p-2 sm:p-3 rounded-full backdrop-blur-md transition-all active:scale-95"
             >
-              <ChevronLeft className="w-8 h-8" />
+              <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8" />
             </button>
           )}
 
@@ -267,7 +275,7 @@ export default function Voces({ mediaData = {} }: { mediaData?: any }) {
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUpOrLeave}
             onMouseLeave={handleMouseUpOrLeave}
-            className={`flex gap-8 h-130 text-white font-courier-prime overflow-x-auto 
+            className={`flex gap-4 sm:gap-6 md:gap-8 h-90 sm:h-105 md:h-130 text-white font-courier-prime overflow-x-auto px-4 sm:px-0
               [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]
               ${
                 isEditMode
@@ -286,7 +294,7 @@ export default function Voces({ mediaData = {} }: { mediaData?: any }) {
                 <motion.div
                   key={voz.id}
                   variants={cardVariants}
-                  className={`relative snap-center shrink-0 w-78 h-92 bg-voces space-y-2 
+                  className={`relative snap-center shrink-0 w-56 h-70 sm:w-64 sm:h-80 md:w-78 md:h-92 bg-voces space-y-2 
                     ${getCardStyles(currentTemplate)} ${hasOverflow && isDragging ? "scale-[0.98]" : ""}`}
                 >
                   {isEditMode && (
@@ -308,12 +316,12 @@ export default function Voces({ mediaData = {} }: { mediaData?: any }) {
                     </div>
                   )}
 
-                  <p className={currentTemplate === "A" || currentTemplate === "C" ? "text-right" : "text-left"}>
+                  <p className={`text-sm sm:text-base ${currentTemplate === "A" || currentTemplate === "C" ? "text-right" : "text-left"}`}>
                     {voz.role}
                   </p>
                   
                   <div 
-                    className="h-24 w-full relative"
+                    className="h-20 sm:h-22 md:h-24 w-full relative"
                     onMouseDown={(e) => { if (isAdmin) e.stopPropagation(); }}
                   >
                     <EditableMedia
@@ -327,7 +335,7 @@ export default function Voces({ mediaData = {} }: { mediaData?: any }) {
                     />
                   </div>
 
-                  <p className={`text-4xl px-4 ${currentTemplate === "B" || currentTemplate === "D" ? "text-right" : "text-left"}`}>
+                  <p className={`text-2xl sm:text-3xl md:text-4xl px-2 sm:px-3 md:px-4 ${currentTemplate === "B" || currentTemplate === "D" ? "text-right" : "text-left"}`}>
                     {voz.name}
                   </p>
                 </motion.div>
@@ -338,9 +346,9 @@ export default function Voces({ mediaData = {} }: { mediaData?: any }) {
           {canScrollRight && (
             <button
               onClick={() => scrollByAmount(400)}
-              className="absolute -right-8 top-1/2 -translate-y-1/2 z-40 bg-black/50 hover:bg-black text-white p-3 rounded-full backdrop-blur-md transition-all active:scale-95"
+              className="absolute right-1 sm:-right-2 md:-right-8 top-1/2 -translate-y-1/2 z-40 bg-black/50 hover:bg-black text-white p-2 sm:p-3 rounded-full backdrop-blur-md transition-all active:scale-95"
             >
-              <ChevronRight className="w-8 h-8" />
+              <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8" />
             </button>
           )}
         </div>
@@ -351,17 +359,17 @@ export default function Voces({ mediaData = {} }: { mediaData?: any }) {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-          className="w-4/9 h-[5px] bg-gray-300 mt-8"
+          className="w-2/3 sm:w-1/2 md:w-4/9 h-[3px] sm:h-[5px] bg-gray-300 mt-6 md:mt-8"
         />
       </section>
 
       {/* POPUP DE AÑADIR VOZ */}
       {showAddModal && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="bg-[#111] border border-white/20 p-6 rounded-2xl w-full max-w-sm flex flex-col gap-5 text-white animate-in zoom-in-95 duration-200 font-courier-prime shadow-2xl">
+          <div className="bg-[#111] border border-white/20 p-5 sm:p-6 rounded-2xl w-full max-w-xs sm:max-w-sm flex flex-col gap-5 text-white animate-in zoom-in-95 duration-200 font-courier-prime shadow-2xl">
             
             <div className="flex justify-between items-center border-b border-white/10 pb-3">
-              <h4 className="text-xl font-bold uppercase tracking-wider">Nueva Voz</h4>
+              <h4 className="text-lg sm:text-xl font-bold uppercase tracking-wider">Nueva Voz</h4>
               <button onClick={() => setShowAddModal(false)} className="text-gray-400 hover:text-white transition-colors">
                 <X className="w-5 h-5" />
               </button>
