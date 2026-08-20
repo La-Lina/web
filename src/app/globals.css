@@ -34,7 +34,9 @@ html,
 body {
   margin: 0;
   padding: 0;
+  background-color: #ffffff; /* Pon aquí el color de fondo de tu web */
   min-height: 100%;
+  min-height: -webkit-fill-available;
 }
 
 body {

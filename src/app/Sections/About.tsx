@@ -111,7 +111,7 @@ export default function About({
           targetRef={left}
           className="text-left p-3 rounded-xl bg-transparent md:p-0 md:rounded-none"
         >
-          <p className="bonito text-lg sm:text-xl md:text-2xl lg:text-3xl md:whitespace-nowrap">has llegado a un espacio de</p>
+          <p className="bonito text-lg sm:text-xl md:text-2xl lg:text-3xl w-[10ch] sm:w-auto md:whitespace-nowrap">has llegado a un espacio de</p>
           <p className="gordo text-2xl md:text-3xl lg:text-4xl">escucha <br /> reflexión <br /> y diálogo</p>
         </TextBlock>
       </div>

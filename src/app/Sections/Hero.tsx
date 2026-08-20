@@ -27,10 +27,10 @@ const Hero = ({ mediaData = {} }: { mediaData?: any }) => {
         lg:text-[28rem] lg:leading-64">
           <span
             className="absolute pl-4
-            text-[8rem] leading-16 top-6 -left-14
-            sm:text-[12rem] sm:leading-24 sm:top-5.5 sm:-left-21
-            md:text-[14rem] md:leading-32 md:top-4 md:-left-24 
-            lg:text-[16rem] lg:leading-38 lg:top-3 lg:-left-28"
+            text-[8rem] leading-16 top-6 -left-18
+            sm:text-[12rem] sm:leading-24 sm:top-5.5 sm:-left-25
+            md:text-[14rem] md:leading-32 md:top-4 md:-left-28 
+            lg:text-[16rem] lg:leading-38 lg:top-3 lg:-left-32"
           >
             la
           </span>
