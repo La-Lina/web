@@ -275,7 +275,7 @@ export default function Voces({ mediaData = {} }: { mediaData?: any }) {
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUpOrLeave}
             onMouseLeave={handleMouseUpOrLeave}
-            className={`flex gap-4 sm:gap-6 md:gap-8 h-90 sm:h-105 md:h-130 text-white font-courier-prime overflow-x-auto px-4 sm:px-0
+            className={`flex gap-4 sm:gap-6 md:gap-8 h-90 sm:h-105 md:h-130 text-white font-courier-prime overflow-x-auto px-4
               [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]
               ${
                 isEditMode
@@ -283,7 +283,7 @@ export default function Voces({ mediaData = {} }: { mediaData?: any }) {
                   : hasOverflow
                   ? isDragging
                     ? "cursor-grabbing select-none scroll-auto"
-                    : "cursor-grab snap-x snap-mandatory scroll-smooth"
+                    : "cursor-grab md:snap-x md:snap-mandatory scroll-smooth"
                   : "cursor-default justify-center overflow-x-hidden"
               }`}
           >
