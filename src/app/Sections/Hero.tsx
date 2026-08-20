@@ -26,7 +26,7 @@ const Hero = ({ mediaData = {} }: { mediaData?: any }) => {
         md:text-[24rem] md:leading-56 
         lg:text-[28rem] lg:leading-64">
           <span
-            className="absolute 
+            className="absolute pl-4
             text-[8rem] leading-16 top-6 -left-14
             sm:text-[12rem] sm:leading-24 sm:top-5.5 sm:-left-21
             md:text-[14rem] md:leading-32 md:top-4 md:-left-24 
