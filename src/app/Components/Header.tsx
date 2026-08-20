@@ -69,7 +69,7 @@ const Header = () => {
 
   return (
     <header
-      className={`hidden md:block w-screen left-0 px-8 z-100 ${isAtTop ? "absolute top-16" : "fixed top-8"}`}
+      className={`hidden md:block w-screen left-0 px-8 z-100 ${isAtTop ? "absolute top-12" : "fixed top-4"}`}
     >
       <div
         className={`flex w-full ml-auto px-8 py-4 justify-between transition-all duration-1000 ${

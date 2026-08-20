@@ -3,7 +3,7 @@ import EditableMedia from "../Components/admin/EditableMedia";
 // 1. Añadimos = {} para que, si no recibe nada, sea un objeto vacío y no 'undefined'
 const Hero = ({ mediaData = {} }: { mediaData?: any }) => {
   return (
-    <section className="w-full h-[90dvh] md:h-screen relative">
+    <section className="w-full h-[90dvh] bg-primary/90 md:h-screen relative">
       <EditableMedia
         uploadType="hero"
         // 2. Añadimos la interrogación (?) para evitar errores
@@ -18,7 +18,7 @@ const Hero = ({ mediaData = {} }: { mediaData?: any }) => {
       <div className="absolute top-1/2 left-1/2 -translate-y-2/3 lg:-translate-x-1/2 pointer-events-none z-10 text-secondary flex flex-col items-end gap-6
       -translate-x-2/5">
         <h1 className="font-cassey relative text-[12rem] md:text-[32rem] md:h-[34rem] ">
-          <span className="text-8xl md:text-[16rem] absolute top-19 -left-9 md:top-34 md:-left-26">la</span>
+          <span className="text-8xl md:text-[16rem] absolute top-19 -left-9 md:top-51 md:-left-26">la</span>
           liña
         </h1>
 

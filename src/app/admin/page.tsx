@@ -20,7 +20,9 @@ export default function AdminLogin() {
   // Condición para deshabilitar el botón: campos vacíos o si está cargando
   const isButtonDisabled = !email.trim() || !password.trim() || isLoading;
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
     setIsLoading(true);
     setError(""); // Limpiamos errores anteriores
 
@@ -56,7 +58,7 @@ export default function AdminLogin() {
       >
         <h2 className="text-2xl font-bold">Modo edición</h2>
 
-        <div className="flex flex-col gap-4 w-9/10">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-9/10">
           <input
             className="bg-gray-700 text-sm w-full rounded-full pl-3 py-2 text-white placeholder-gray-400 outline-none focus:ring-1 focus:ring-gray-400"
             placeholder="Usuario"
@@ -70,7 +72,7 @@ export default function AdminLogin() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-        </div>
+        </form>
 
         {/* MENSAJE DE ERROR (Solo se muestra si el estado tiene texto) */}
         {error && (
@@ -80,13 +82,13 @@ export default function AdminLogin() {
         )}
 
         <button
+          type="submit"
           className={`font-courier-prime font-bold py-2 w-6/10 mt-4 rounded-full transition-all duration-300
-            ${
-              isButtonDisabled
-                ? "bg-gray-600 text-gray-400 cursor-not-allowed opacity-50"
-                : "bg-primary text-white hover:brightness-110 active:scale-95"
-            }`}
-          onClick={handleSubmit}
+    ${
+      isButtonDisabled
+        ? "bg-gray-600 text-gray-400 cursor-not-allowed opacity-50"
+        : "bg-primary text-white hover:brightness-110 active:scale-95"
+    }`}
           disabled={!mounted || isButtonDisabled}
         >
           {isLoading ? "Entrando..." : "Entrar"}

@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 import EditableMedia from "../Components/admin/EditableMedia";
 import { ChevronLeft, ChevronRight, Edit2, Check, ArrowLeft, ArrowRight, Plus, Trash2, X } from "lucide-react";
 import { useEditor } from "../Components/editor/EditorProvider"; 
 import UploadButton from "../Components/upload/UploadButton";
 
-// Array de respaldo por si la base de datos está vacía la primera vez
 const FALLBACK_VOCES = [
   { id: "1", name: "Marta", role: "psicóloga", uploadType: "vocesMarta" },
   { id: "2", name: "Pedro", role: "biólogo marino", uploadType: "vocesPedro" },
@@ -14,49 +14,60 @@ const FALLBACK_VOCES = [
   { id: "4", name: "Marcos", role: "noleo quepone", uploadType: "vocesMarcos" },
 ];
 
+// 1. Variantes de animación
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2, // Retraso secuencial entre cada tarjeta
+      delayChildren: 0.2,
+    },
+  },
+};
+
+const cardVariants: any = {
+  hidden: { opacity: 0, x: 100 }, // Empiezan desplazadas a la derecha
+  visible: {
+    opacity: 1,
+    x: 0, // Llegan a su posición original
+    transition: {
+      duration: 0.7,
+      ease: [0.22, 1, 0.36, 1], // Curva suave y fluida
+    },
+  },
+};
+
 export default function Voces({ mediaData = {} }: { mediaData?: any }) {
-  const sectionRef = useRef<HTMLDivElement | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
   
   const { isAdmin } = useEditor(); 
   
-  // Leemos la lista de voces de la base de datos (o usamos el respaldo)
   const [voces, setVoces] = useState<any[]>(mediaData?.vocesList || FALLBACK_VOCES);
   
-  // Estados para el Modo Edición y el Modal
   const [isEditMode, setIsEditMode] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
   
-  // Estados del Formulario de nueva voz
   const [newName, setNewName] = useState("");
   const [newRole, setNewRole] = useState("");
   const [newSrc, setNewSrc] = useState("");
   const [isSavingVoice, setIsSavingVoice] = useState(false);
 
-  const [show, setShow] = useState(false);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+  const [hasOverflow, setHasOverflow] = useState(false);
 
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeftPos, setScrollLeftPos] = useState(0);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setShow(true);
-      },
-      { threshold: 0.3 }
-    );
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, []);
-
   const checkArrows = () => {
     if (!scrollRef.current) return;
     const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+    const overflow = scrollWidth > clientWidth + 2;
+    setHasOverflow(overflow);
     setCanScrollLeft(scrollLeft > 0);
-    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 2);
+    setCanScrollRight(overflow && scrollLeft < scrollWidth - clientWidth - 2);
   };
 
   useEffect(() => {
@@ -72,14 +83,14 @@ export default function Voces({ mediaData = {} }: { mediaData?: any }) {
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    if (!scrollRef.current || isEditMode) return;
+    if (!scrollRef.current || isEditMode || !hasOverflow) return;
     setIsDragging(true);
     setStartX(e.pageX - scrollRef.current.offsetLeft);
     setScrollLeftPos(scrollRef.current.scrollLeft);
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging || !scrollRef.current) return;
+    if (!isDragging || !scrollRef.current || !hasOverflow) return;
     e.preventDefault();
     const x = e.pageX - scrollRef.current.offsetLeft;
     const walk = (x - startX) * 2; 
@@ -88,7 +99,6 @@ export default function Voces({ mediaData = {} }: { mediaData?: any }) {
 
   const handleMouseUpOrLeave = () => setIsDragging(false);
 
-  // --- API DE DATOS (GUARDAR LISTA ENTERA) ---
   const saveVocesListToDB = async (listToSave: any[]) => {
     try {
       await fetch("/api/media", {
@@ -101,7 +111,6 @@ export default function Voces({ mediaData = {} }: { mediaData?: any }) {
     }
   };
 
-  // --- FUNCIONES DE REORDENAMIENTO Y ELIMINACIÓN ---
   const moveVoice = (index: number, direction: "left" | "right") => {
     if (direction === "left" && index === 0) return;
     if (direction === "right" && index === voces.length - 1) return;
@@ -117,7 +126,6 @@ export default function Voces({ mediaData = {} }: { mediaData?: any }) {
     setVoces(newVoces);
   };
 
-  // --- FUNCIÓN AÑADIR NUEVA VOZ DESDE EL POPUP ---
   const handleAddVoice = async () => {
     if (!newName.trim() || !newRole.trim()) {
       alert("Por favor, rellena el nombre y el rol.");
@@ -125,7 +133,6 @@ export default function Voces({ mediaData = {} }: { mediaData?: any }) {
     }
     setIsSavingVoice(true);
     
-    // Generamos un ID único y una clave de subida basada en la fecha actual
     const newId = Date.now().toString();
     const newUploadType = `voz_${newId}`;
     
@@ -134,7 +141,7 @@ export default function Voces({ mediaData = {} }: { mediaData?: any }) {
       name: newName, 
       role: newRole, 
       uploadType: newUploadType,
-      tempSrc: newSrc // Guardamos la URL localmente para que se vea hasta que recargue la página
+      tempSrc: newSrc
     };
 
     const newList = [...voces, newVoice];
@@ -164,7 +171,6 @@ export default function Voces({ mediaData = {} }: { mediaData?: any }) {
     }
   };
 
-  // --- CÁLCULO DINÁMICO DE PLANTILLA ---
   const getTemplateByIndex = (index: number) => {
     const pos = index % 4; 
     if (pos === 0) return "A";
@@ -186,29 +192,35 @@ export default function Voces({ mediaData = {} }: { mediaData?: any }) {
   return (
     <>
       <section
-        ref={sectionRef}
         id="voces"
         className="py-8 mb-20 gap-8 flex flex-col items-center overflow-hidden w-full relative"
       >
-        <div
-          className={`w-4/9 h-[5px] bg-gray-300 transition-all duration-700
-          ${show ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"}`}
+        {/* DIVISOR SUPERIOR */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="w-4/9 h-[5px] bg-gray-300"
         />
         
-        {/* TÍTULO Y CONTROLES DEL MODO EDICIÓN */}
+        {/* TÍTULO */}
         <div className="flex flex-col items-center gap-4">
-          <h3
-            className={`font-courier-prime font-bold text-4xl transition-all duration-700 delay-150
-            ${show ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+          <motion.h3
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.8, delay: 0.15, ease: "easeOut" }}
+            className="font-courier-prime font-bold text-4xl"
           >
             VOCES
-          </h3>
+          </motion.h3>
 
           {isAdmin && (
             <div className="flex gap-2 animate-in fade-in zoom-in duration-300">
               <button
                 onClick={() => {
-                  if (isEditMode) saveVocesListToDB(voces); // Guardar orden al finalizar
+                  if (isEditMode) saveVocesListToDB(voces);
                   setIsEditMode(!isEditMode);
                 }}
                 className={`flex items-center gap-2 px-4 py-2 rounded-full font-bold text-xs uppercase tracking-wider transition-all shadow-md border ${
@@ -220,7 +232,6 @@ export default function Voces({ mediaData = {} }: { mediaData?: any }) {
                 {isEditMode ? <><Check className="w-4 h-4" /> Finalizar Edición</> : <><Edit2 className="w-4 h-4" /> Modo Edición</>}
               </button>
 
-              {/* BOTÓN AÑADIR VOZ (Solo visible en Modo Edición) */}
               {isEditMode && (
                 <button
                   onClick={() => setShowAddModal(true)}
@@ -233,21 +244,24 @@ export default function Voces({ mediaData = {} }: { mediaData?: any }) {
           )}
         </div>
 
-        <div 
-          className={`relative w-full max-w-9/10 mt-8 transition-all duration-700 delay-300 
-          ${show ? "opacity-100 translate-y-0" : "opacity-0 translate-y-20"}`}
-        >
+        {/* CONTENEDOR VOCES */}
+        <div className="relative w-full max-w-9/10 mt-8">
           {canScrollLeft && (
             <button
               onClick={() => scrollByAmount(-400)}
               className="absolute -left-8 top-1/2 -translate-y-1/2 z-40 bg-black/50 hover:bg-black text-white p-3 rounded-full backdrop-blur-md transition-all active:scale-95"
             >
-              <ChevronLeft className=" w-8 h-8" />
+              <ChevronLeft className="w-8 h-8" />
             </button>
           )}
 
-          <div
+          {/* Animamos el contenedor scroll con variants */}
+          <motion.div
             ref={scrollRef}
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
             onScroll={checkArrows}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
@@ -255,18 +269,26 @@ export default function Voces({ mediaData = {} }: { mediaData?: any }) {
             onMouseLeave={handleMouseUpOrLeave}
             className={`flex gap-8 h-130 text-white font-courier-prime overflow-x-auto 
               [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]
-              ${isEditMode ? "scroll-auto overflow-x-scroll" : isDragging ? "cursor-grabbing select-none scroll-auto" : "cursor-grab snap-x snap-mandatory scroll-smooth"}`}
+              ${
+                isEditMode
+                  ? "scroll-auto overflow-x-scroll"
+                  : hasOverflow
+                  ? isDragging
+                    ? "cursor-grabbing select-none scroll-auto"
+                    : "cursor-grab snap-x snap-mandatory scroll-smooth"
+                  : "cursor-default justify-center overflow-x-hidden"
+              }`}
           >
             {voces.map((voz, index) => {
               const currentTemplate = getTemplateByIndex(index);
               
               return (
-                <div
+                <motion.div
                   key={voz.id}
-                  className={`relative snap-center shrink-0 w-80 h-92 bg-voces space-y-2 transition-transform duration-300 
-                    ${getCardStyles(currentTemplate)} ${isDragging ? "scale-[0.98]" : ""}`}
+                  variants={cardVariants}
+                  className={`relative snap-center shrink-0 w-78 h-92 bg-voces space-y-2 
+                    ${getCardStyles(currentTemplate)} ${hasOverflow && isDragging ? "scale-[0.98]" : ""}`}
                 >
-                  {/* CONTROLES DE REORDENAMIENTO Y ELIMINACIÓN */}
                   {isEditMode && (
                     <div className="absolute -top-12 left-1/2 -translate-x-1/2 flex gap-1 z-50 bg-black/80 px-2 py-1 rounded-full border border-white/20 backdrop-blur-sm">
                       <button 
@@ -296,7 +318,6 @@ export default function Voces({ mediaData = {} }: { mediaData?: any }) {
                   >
                     <EditableMedia
                       uploadType={voz.uploadType}
-                      // Utilizamos el fallback tempSrc por si la acabamos de crear en esta sesión
                       initialSrc={mediaData?.[`${voz.uploadType}_src`] || voz.tempSrc || "/gin_xmas.jfif"}
                       initialPosX={mediaData?.[`${voz.uploadType}_posX`] ?? 50}
                       initialPosY={mediaData?.[`${voz.uploadType}_posY`] ?? 50}
@@ -309,24 +330,28 @@ export default function Voces({ mediaData = {} }: { mediaData?: any }) {
                   <p className={`text-4xl px-4 ${currentTemplate === "B" || currentTemplate === "D" ? "text-right" : "text-left"}`}>
                     {voz.name}
                   </p>
-                </div>
+                </motion.div>
               );
             })}
-          </div>
+          </motion.div>
 
           {canScrollRight && (
             <button
               onClick={() => scrollByAmount(400)}
               className="absolute -right-8 top-1/2 -translate-y-1/2 z-40 bg-black/50 hover:bg-black text-white p-3 rounded-full backdrop-blur-md transition-all active:scale-95"
             >
-              <ChevronRight className=" w-8 h-8" />
+              <ChevronRight className="w-8 h-8" />
             </button>
           )}
         </div>
 
-        <div
-          className={`w-4/9 h-[5px] bg-gray-300 mt-8 transition-all duration-700 delay-500
-          ${show ? "opacity-100" : "opacity-0"}`}
+        {/* DIVISOR INFERIOR */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+          className="w-4/9 h-[5px] bg-gray-300 mt-8"
         />
       </section>
 
@@ -367,7 +392,6 @@ export default function Voces({ mediaData = {} }: { mediaData?: any }) {
 
               <div className="flex flex-col gap-1 border border-dashed border-white/20 p-4 rounded-md items-center justify-center">
                 <label className="text-xs text-gray-400 uppercase tracking-widest mb-2 text-center w-full">Foto o Vídeo</label>
-                {/* Utilizamos el UploadButton. Ponemos "temp_voice_upload" como clave temporal solo para que se suba el archivo y devuelva la URL */}
                 {newSrc ? (
                   <div className="text-green-400 text-xs font-bold flex items-center gap-1"><Check className="w-3 h-3"/> Archivo cargado</div>
                 ) : (
