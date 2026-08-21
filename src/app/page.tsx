@@ -7,33 +7,34 @@ import Header from "./Components/Header";
 import { getMedia } from "@/lib/media";
 import ExitAdminButton from "./Components/admin/ExitAdminButton";
 import MaintenanceToggle from "./Components/admin/MaintenanceToggle";
+import { getServerSession } from "next-auth/next";
+import { authConfig } from "@/auth";
 
 export default async function Home() {
   const media = await getMedia();
 
-  const maintenance = Boolean(
-    media && typeof media === "object" && "maintenance" in media && media.maintenance === true,
-  );
+  const session = await getServerSession(authConfig);
+  const isAdmin = session?.user?.role === "admin";
 
-  if (maintenance) {
-    return (
-      <div>
-        <Hero mediaData={media} />
-
-        <MaintenanceToggle initialMaintenance={maintenance} />
-        <ExitAdminButton />
-      </div>
-    );
-  }
+  const mediaWithMaintenance = media as { maintenance?: boolean } | null | undefined;
+  const maintenance = mediaWithMaintenance?.maintenance === true;
 
   return (
     <div>
-      <Header />
-      <Hero mediaData={media} />
-      <About />
-      <Voces mediaData={media} />
-      <Highlight mediaData={media} />
-      <Contact />
+      {(!maintenance || isAdmin) && (
+        <>
+          <Header />
+          <Hero mediaData={media} />
+          <About />
+          <Voces mediaData={media} />
+          <Highlight mediaData={media} />
+          <Contact />
+        </>
+      )}
+
+      {maintenance && !isAdmin && (
+        <Hero mediaData={media} />
+      )}
 
       <MaintenanceToggle initialMaintenance={maintenance} />
       <ExitAdminButton />
