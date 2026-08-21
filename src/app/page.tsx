@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import Hero from "./Sections/Hero";
 import About from "./Sections/About";
 import Voces from "./Sections/Voces";

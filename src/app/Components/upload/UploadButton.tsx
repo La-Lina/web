@@ -12,6 +12,7 @@ export default function UploadButton({
   onUploaded: (url: string) => void;
 }) {
   const { isAdmin } = useEditor();
+
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState("");
 
@@ -22,14 +23,16 @@ export default function UploadButton({
     setError("");
 
     try {
-      const res = await uploadFile(file, type);
-      onUploaded(res.url);
+      const result = await uploadFile(file, type);
+
+      onUploaded(result.url);
     } catch (error) {
       console.error("Error subiendo archivo:", error);
+
       setError(
         error instanceof Error
           ? error.message
-          : "Error subiendo el archivo."
+          : "Error subiendo el archivo.",
       );
     } finally {
       setIsUploading(false);
@@ -52,11 +55,11 @@ export default function UploadButton({
           disabled={isUploading}
           onChange={async (e) => {
             const file = e.target.files?.[0];
+
             if (!file) return;
 
             await handleUpload(file);
 
-            // Permite volver a seleccionar el mismo archivo
             e.target.value = "";
           }}
         />
