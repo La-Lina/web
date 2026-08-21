@@ -2,9 +2,28 @@
 
 import { useEffect, useState } from "react";
 
+const smoothScrollTo = (target: number): void => {
+  const start = window.scrollY;
+  const distance = target - start;
+  const duration = 1400;
+  const startTime = performance.now();
+
+  const animate = (currentTime: number) => {
+    const progress = Math.min((currentTime - startTime) / duration, 1);
+    const easedProgress = progress * (2 - progress);
+    window.scrollTo(0, start + distance * easedProgress);
+
+    if (progress < 1) {
+      requestAnimationFrame(animate);
+    }
+  };
+
+  requestAnimationFrame(animate);
+};
+
 const ScrollTo = (id?: string): void => {
   if (id == null) {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    smoothScrollTo(0);
     return;
   }
 
@@ -30,9 +49,9 @@ const ScrollTo = (id?: string): void => {
     const offset =
       parseFloat(getComputedStyle(document.documentElement).fontSize) * offsetVar;
     const top = el.getBoundingClientRect().top + window.scrollY - offset;
-    window.scrollTo({ top, behavior: "smooth" });
+    smoothScrollTo(top);
   } else {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    smoothScrollTo(0);
   }
 };
 
@@ -79,7 +98,7 @@ const Header = () => {
       >
         <button
           type="button"
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          onClick={() => ScrollTo("hero")}
         >
           <img
             className="lg:w-64 w-48"

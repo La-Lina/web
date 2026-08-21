@@ -3,7 +3,7 @@ import EditableMedia from "../Components/admin/EditableMedia";
 // 1. Añadimos = {} para que, si no recibe nada, sea un objeto vacío y no 'undefined'
 const Hero = ({ mediaData = {} }: { mediaData?: any }) => {
   return (
-    <section className="w-full h-[90dvh] bg-primary/90 md:h-screen relative overflow-visible">
+    <section className="w-full h-[90dvh] bg-primary/90 md:h-screen relative overflow-visible" id="hero">
       <EditableMedia
         uploadType="hero"
         // 2. Añadimos la interrogación (?) para evitar errores

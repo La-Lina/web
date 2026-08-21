@@ -95,7 +95,7 @@ export default function About({
   const right = useRef<HTMLDivElement | null>(null);
 
   return (
-    <section className="w-full md:px-12 lg:px-20 text-primary space-y-24 py-16">
+    <section className="w-full md:px-12 lg:px-20 text-primary space-y-24 py-16" id="about">
       {/* LEFT */}
       <div
         ref={left}
