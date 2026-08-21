@@ -12,7 +12,6 @@ export default function UploadButton({
   onUploaded: (url: string) => void;
 }) {
   const { isAdmin } = useEditor();
-
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState("");
 
@@ -25,15 +24,14 @@ export default function UploadButton({
     try {
       const result = await uploadFile(file, type);
 
+      if (!result?.url) {
+        throw new Error("No se recibió la URL del archivo.");
+      }
+
       onUploaded(result.url);
     } catch (error) {
       console.error("Error subiendo archivo:", error);
-
-      setError(
-        error instanceof Error
-          ? error.message
-          : "Error subiendo el archivo.",
-      );
+      setError("Error al subir el archivo.");
     } finally {
       setIsUploading(false);
     }
@@ -42,31 +40,35 @@ export default function UploadButton({
   return (
     <div className="flex flex-col gap-2">
       <label
-        className={`z-50 bg-primary justify-center font-bold rounded-full button text-white px-4 py-2 cursor-pointer inline-flex items-center ${
-          isUploading ? "opacity-50 cursor-wait" : ""
+        className={`z-50 justify-center font-bold rounded-full button text-white px-4 py-2 inline-flex items-center ${
+          isUploading
+            ? "bg-gray-600 cursor-wait"
+            : "bg-primary cursor-pointer"
         }`}
       >
         {isUploading ? "Subiendo..." : "Subir archivo"}
 
-        <input
-          type="file"
-          className="hidden"
-          accept="image/*,video/*"
-          disabled={isUploading}
-          onChange={async (e) => {
-            const file = e.target.files?.[0];
+        {!isUploading && (
+          <input
+            type="file"
+            className="hidden"
+            accept="image/*,video/*"
+            onChange={async (e) => {
+              const file = e.target.files?.[0];
 
-            if (!file) return;
+              if (!file) return;
 
-            await handleUpload(file);
+              await handleUpload(file);
 
-            e.target.value = "";
-          }}
-        />
+              // Permite volver a seleccionar el mismo archivo
+              e.target.value = "";
+            }}
+          />
+        )}
       </label>
 
       {error && (
-        <p className="text-red-400 text-[10px] text-center">
+        <p className="text-red-400 text-xs text-center">
           {error}
         </p>
       )}
