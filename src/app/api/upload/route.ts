@@ -1,62 +1,99 @@
-import { handleUpload, type HandleUploadBody } from "@vercel/blob/client";
+import {
+  handleUpload,
+  type HandleUploadBody,
+} from "@vercel/blob/client";
+
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   try {
     const body = (await request.json()) as HandleUploadBody;
 
-    const jsonResponse = await handleUpload({
+    console.log("[API UPLOAD] Petición recibida");
+
+    const response = await handleUpload({
       body,
       request,
 
       onBeforeGenerateToken: async (
         pathname,
-        clientPayload,
-        multipart
+        clientPayload
       ) => {
+        console.log(
+          "[API UPLOAD] Generando token para:",
+          pathname
+        );
+
         let type = "media";
 
         if (clientPayload) {
           try {
             const payload = JSON.parse(clientPayload);
-            type = payload.type || "media";
-          } catch {
-            // Si el payload no es válido, usamos "media"
+
+            if (payload.type) {
+              type = payload.type;
+            }
+          } catch (error) {
+            console.error(
+              "[API UPLOAD] Error leyendo clientPayload:",
+              error
+            );
           }
         }
 
-        const extension = pathname.split(".").pop() || "";
-        const safeType = type.replace(/[^a-zA-Z0-9_-]/g, "");
-        const safeExtension = extension.replace(/[^a-zA-Z0-9]/g, "");
+        const extension =
+          pathname.split(".").pop()?.toLowerCase() || "";
+
+        const safeType = type.replace(
+          /[^a-zA-Z0-9_-]/g,
+          ""
+        );
+
+        const safeExtension = extension.replace(
+          /[^a-zA-Z0-9]/g,
+          ""
+        );
+
+        const filename = `${safeType}_${Date.now()}_${Math.random()
+          .toString(36)
+          .substring(2)}.${safeExtension}`;
+
+        console.log(
+          "[API UPLOAD] Nombre final:",
+          filename
+        );
 
         return {
-          pathname: `${safeType}_${Date.now()}_${Math.random()
-            .toString(36)
-            .substring(2)}.${safeExtension}`,
-
           allowedContentTypes: [
             "image/*",
             "video/*",
           ],
 
-          maximumSizeInBytes: 500 * 1024 * 1024,
+          maximumSizeInBytes:
+            500 * 1024 * 1024,
 
-          multipart,
-
-          tokenPayload: JSON.stringify({
-            type: safeType,
-          }),
+          pathname: filename,
         };
       },
 
       onUploadCompleted: async ({ blob }) => {
-        console.log("Archivo subido correctamente:", blob.url);
+        console.log(
+          "[API UPLOAD] Archivo completado:",
+          blob.url
+        );
       },
     });
 
-    return NextResponse.json(jsonResponse);
+    console.log(
+      "[API UPLOAD] Respuesta generada correctamente"
+    );
+
+    return NextResponse.json(response);
   } catch (error) {
-    console.error("Error preparando subida:", error);
+    console.error(
+      "[API UPLOAD] ERROR:",
+      error
+    );
 
     return NextResponse.json(
       {
@@ -65,7 +102,9 @@ export async function POST(request: Request) {
             ? error.message
             : "Error preparando la subida",
       },
-      { status: 400 }
+      {
+        status: 400,
+      }
     );
   }
 }
