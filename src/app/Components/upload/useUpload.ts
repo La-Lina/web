@@ -1,24 +1,15 @@
 import { upload } from "@vercel/blob/client";
 
 export async function uploadFile(file: File, type: string) {
-  const extension = file.name.split(".").pop()?.toLowerCase() || "";
-  const safeType = type.replace(/[^a-zA-Z0-9_-]/g, "");
-  const filename = `${safeType}_${Date.now()}_${Math.random()
-    .toString(36)
-    .substring(2)}.${extension}`;
+  console.log("[UPLOAD] Iniciando:", file.name, file.size, file.type);
 
-  // Enviamos el archivo directamente a tu propio backend
-  const response = await fetch(`/api/upload?filename=${filename}`, {
-    method: "POST",
-    body: file,
+  const blob = await upload(file.name, file, {
+    access: "public",
+    handleUploadUrl: "/api/upload",
+    clientPayload: JSON.stringify({ type }),
   });
 
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.error || "Error al procesar el archivo en el servidor.");
-  }
-
-  const blob = await response.json();
+  console.log("[UPLOAD] Blob recibido:", blob);
 
   return {
     url: blob.url,

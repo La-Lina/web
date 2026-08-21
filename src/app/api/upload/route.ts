@@ -1,29 +1,110 @@
-import { put } from "@vercel/blob";
+import {
+  handleUpload,
+  type HandleUploadBody,
+} from "@vercel/blob/client";
+
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   try {
-    const { searchParams } = new URL(request.url);
-    const filename = searchParams.get("filename") || "archivo.jpg";
+    const body = (await request.json()) as HandleUploadBody;
 
-    if (!request.body) {
-      return NextResponse.json(
-        { error: "No se proporcionó ningún archivo" },
-        { status: 400 }
-      );
-    }
+    console.log("[API UPLOAD] Petición recibida");
 
-    // La subida se realiza directamente desde tu servidor hacia Vercel Blob
-    const blob = await put(filename, request.body, {
-      access: "public",
+    const response = await handleUpload({
+      body,
+      request,
+
+      onBeforeGenerateToken: async (
+        pathname,
+        clientPayload
+      ) => {
+        console.log(
+          "[API UPLOAD] Generando token para:",
+          pathname
+        );
+
+        let type = "media";
+
+        if (clientPayload) {
+          try {
+            const payload = JSON.parse(clientPayload);
+
+            if (payload.type) {
+              type = payload.type;
+            }
+          } catch (error) {
+            console.error(
+              "[API UPLOAD] Error leyendo clientPayload:",
+              error
+            );
+          }
+        }
+
+        const extension =
+          pathname.split(".").pop()?.toLowerCase() || "";
+
+        const safeType = type.replace(
+          /[^a-zA-Z0-9_-]/g,
+          ""
+        );
+
+        const safeExtension = extension.replace(
+          /[^a-zA-Z0-9]/g,
+          ""
+        );
+
+        const filename = `${safeType}_${Date.now()}_${Math.random()
+          .toString(36)
+          .substring(2)}.${safeExtension}`;
+
+        console.log(
+          "[API UPLOAD] Nombre final:",
+          filename
+        );
+
+        return {
+          allowedContentTypes: [
+            "image/*",
+            "video/*",
+          ],
+
+          maximumSizeInBytes:
+            500 * 1024 * 1024,
+
+          pathname: filename,
+        };
+      },
+
+      onUploadCompleted: async ({ blob }) => {
+        console.log(
+          "[API UPLOAD] Archivo completado:",
+          blob.url
+        );
+      },
     });
 
-    return NextResponse.json(blob);
+    console.log(
+      "[API UPLOAD] Respuesta generada correctamente"
+    );
+
+    return NextResponse.json(response);
   } catch (error) {
-    console.error("[API UPLOAD ERROR]", error);
+    console.error(
+      "[API UPLOAD] ERROR:",
+      error
+    );
+
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Error al subir" },
-      { status: 500 }
+      {
+        error:
+          error instanceof Error
+            ? error.message
+            : "Error preparando la subida",
+      },
+      {
+        status: 400,
+      }
     );
   }
 }
