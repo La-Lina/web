@@ -104,7 +104,7 @@ export default function About({
       >
         <AnimatedMediaBlock
           initialSrc={initialLeftImg} uploadType="aboutLeftImage"
-          className="w-44 sm:w-58 md:w-72 lg:w-80" targetRef={left}
+          className="w-40 sm:w-58 md:w-72 lg:w-80" targetRef={left}
           initialPosX={leftX} initialPosY={leftY} initialZoom={leftZoom} initialBrightness={leftBrightness}
         />
         <TextBlock
@@ -112,7 +112,7 @@ export default function About({
           className="text-left p-3 rounded-xl bg-transparent md:p-0 md:rounded-none"
         >
           <p className="bonito text-lg sm:text-xl md:text-2xl lg:text-3xl w-[10ch] sm:w-auto md:whitespace-nowrap">has llegado a un espacio de</p>
-          <p className="gordo text-2xl md:text-3xl lg:text-4xl">escucha <br /> reflexión <br /> y diálogo</p>
+          <p className="gordo text-xl md:text-3xl lg:text-4xl">escucha <br /> reflexión <br /> y diálogo</p>
         </TextBlock>
       </div>
 
@@ -127,11 +127,11 @@ export default function About({
           className="text-right p-3 rounded-xl bg-transparent md:p-0 md:rounded-none"
         >
           <p className="bonito text-lg sm:text-xl md:text-2xl lg:text-3xl md:whitespace-nowrap">donde distintos <br /> roces comparten</p>
-          <p className="gordo text-2xl md:text-3xl lg:text-4xl">experiencias <br /> miradas <br /> y preguntas</p>
+          <p className="gordo text-xl md:text-3xl lg:text-4xl">experiencias <br /> miradas <br /> y preguntas</p>
         </TextBlock>
         <AnimatedMediaBlock
           initialSrc={initialMidImg} uploadType="aboutMidImage"
-          className="w-44 sm:w-58 md:w-72 lg:w-80" targetRef={mid}
+          className="w-40 sm:w-58 md:w-72 lg:w-80" targetRef={mid}
           initialPosX={midX} initialPosY={midY} initialZoom={midZoom} initialBrightness={midBrightness}
         />
       </div>
@@ -145,12 +145,12 @@ export default function About({
         <div className="text-left md:text-right flex flex-row md:flex-col items-end gap-2">
           <AnimatedMediaBlock
             initialSrc={initialRightImg} uploadType="aboutRightImage"
-            className="w-48 sm:w-60 md:w-72 lg:w-72" targetRef={right}
+            className="w-40 sm:w-60 md:w-72 lg:w-72" targetRef={right}
             initialPosX={rightX} initialPosY={rightY} initialZoom={rightZoom} initialBrightness={rightBrightness}
           />
           <TextBlock targetRef={right}>
             <p className="bonito text-lg sm:text-xl md:text-2xl lg:text-3xl">sobre el</p>
-            <p className="gordo text-2xl sm:text-3xl md:text-3xl lg:text-4xl">presente</p>
+            <p className="gordo text-xl sm:text-3xl md:text-3xl lg:text-4xl">presente</p>
             <p className="bonito text-lg sm:text-xl md:text-2xl lg:text-3xl">que estamos viviendo <br /> y de dónde partimos</p>
           </TextBlock>
         </div>
