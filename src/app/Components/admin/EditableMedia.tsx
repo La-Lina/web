@@ -127,12 +127,16 @@ export default function EditableMedia({
   }
 
   const handleSaveAll = async () => {
-    if (!isDirty) return;
+    if (!isDirty || isSaving) return;
+
     setIsSaving(true);
+
     try {
-      await fetch("/api/media", {
+      const res = await fetch("/api/media", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           [`${uploadType}_src`]: src,
           [`${uploadType}_posX`]: posX,
@@ -142,8 +146,23 @@ export default function EditableMedia({
         }),
       });
 
-      setSavedData({ src, posX, posY, zoom, brightness });
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || "Error guardando los datos");
+      }
+
+      setSavedData({
+        src,
+        posX,
+        posY,
+        zoom,
+        brightness,
+      });
+
       setHasSavedOnce(true);
+
+      console.log("Media guardado correctamente:", data.data);
     } catch (error) {
       console.error("Error al guardar:", error);
     } finally {
