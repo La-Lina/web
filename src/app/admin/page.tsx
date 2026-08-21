@@ -4,12 +4,6 @@ import { signIn } from "next-auth/react";
 import { useEffect, useState } from "react";
 
 export default function AdminLogin() {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -65,6 +59,7 @@ export default function AdminLogin() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
+
           <input
             className="bg-gray-700 text-sm w-full rounded-full pl-3 py-2 text-white placeholder-gray-400 outline-none focus:ring-1 focus:ring-gray-400"
             placeholder="Contraseña"
@@ -72,27 +67,26 @@ export default function AdminLogin() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+
+          {error && (
+            <p className="text-red-500 text-xs font-semibold text-center w-full">
+              {error}
+            </p>
+          )}
+
+          <button
+            type="submit"
+            className={`font-courier-prime font-bold py-2 w-6/10 mt-4 rounded-full transition-all duration-300
+      ${
+        isButtonDisabled
+          ? "bg-gray-600 text-gray-400 cursor-not-allowed opacity-50"
+          : "bg-primary text-white hover:brightness-110 active:scale-95"
+      }`}
+            disabled={isButtonDisabled}
+          >
+            {isLoading ? "Entrando..." : "Entrar"}
+          </button>
         </form>
-
-        {/* MENSAJE DE ERROR (Solo se muestra si el estado tiene texto) */}
-        {error && (
-          <p className="text-red-500 text-xs font-semibold text-center w-full">
-            {error}
-          </p>
-        )}
-
-        <button
-          type="submit"
-          className={`font-courier-prime font-bold py-2 w-6/10 mt-4 rounded-full transition-all duration-300
-    ${
-      isButtonDisabled
-        ? "bg-gray-600 text-gray-400 cursor-not-allowed opacity-50"
-        : "bg-primary text-white hover:brightness-110 active:scale-95"
-    }`}
-          disabled={!mounted || isButtonDisabled}
-        >
-          {isLoading ? "Entrando..." : "Entrar"}
-        </button>
       </div>
     </div>
   );
