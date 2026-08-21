@@ -1,67 +1,42 @@
-import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import Hero from "./Sections/Hero";
+import About from "./Sections/About";
+import Voces from "./Sections/Voces";
+import Highlight from "./Sections/Highlight";
+import Contact from "./Sections/Contact";
+import Header from "./Components/Header";
+import { getMedia } from "@/lib/media";
+import ExitAdminButton from "./Components/admin/ExitAdminButton";
+import MaintenanceToggle from "./Components/admin/MaintenanceToggle";
 import { getServerSession } from "next-auth/next";
 import { authConfig } from "@/auth";
-import { EditorProvider } from "./Components/editor/EditorProvider";
-import PageTransition from "./Components/PageTransition";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+export default async function Home() {
+  const media = (await getMedia()) as { maintenance?: boolean } | null | undefined;
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-export const metadata: Metadata = {
-  title: "La Liña",
-  description: "La voz nómada de Canarias - Podcast canario",
-  icons: {
-    icon: "/favicon.png",
-  },
-};
-
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-  viewportFit: "cover", // Permite extenderse tras el notch y la barra inferior
-  themeColor: "#ffffff", // Tiñe la barra de estado y los controles de Safari
-};
-
-export default async function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
   const session = await getServerSession(authConfig);
-
   const isAdmin = session?.user?.role === "admin";
 
-  return (
-    <html
-      lang="es"
-      className={`${geistSans.variable} ${geistMono.variable} min-h-dvh bg-white antialiased`}
-    >
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin=""
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body className="min-h-dvh flex flex-col bg-white">
-        <PageTransition />
+  const maintenance = media?.maintenance === true;
 
-        <EditorProvider isAdmin={isAdmin}>{children}</EditorProvider>
-      </body>
-    </html>
+  return (
+    <div>
+      {(!maintenance || isAdmin) && (
+        <>
+          <Header />
+          <Hero mediaData={media} />
+          <About />
+          <Voces mediaData={media} />
+          <Highlight mediaData={media} />
+          <Contact />
+        </>
+      )}
+
+      {maintenance && !isAdmin && (
+        <Hero mediaData={media} />
+      )}
+
+      <MaintenanceToggle initialMaintenance={maintenance} />
+      <ExitAdminButton />
+    </div>
   );
 }

@@ -67,7 +67,7 @@ export default function MaintenanceToggle({
 
         <span
           className={`relative w-10 h-5 rounded-full transition-colors ${
-            maintenance ? "bg-secondary" : "bg-gray-600"
+            maintenance ? "bg-red-500" : "bg-gray-600"
           }`}
         >
           <span
@@ -76,7 +76,7 @@ export default function MaintenanceToggle({
             }`}
           >
             {isSaving && (
-              <span className="absolute inset-0 rounded-full border-2 border-secondary border-t-transparent animate-spin" />
+              <span className="absolute inset-0 rounded-full border-3 border-red-500 border-t-transparent animate-spin" />
             )}
           </span>
         </span>
