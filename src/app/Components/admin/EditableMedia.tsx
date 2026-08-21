@@ -247,13 +247,6 @@ export default function EditableMedia({
         </div>
       )}
 
-      {/* Indicador de arrastre */}
-      {isAdmin && (
-        <div className="absolute bottom-3 left-4 bg-black/70 text-white text-[9px] tracking-wider uppercase px-2 py-0.5 rounded-full pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 backdrop-blur-sm z-40">
-          {isDragging ? "Ajustando..." : "Arrastra foto"}
-        </div>
-      )}
-
       {/* CONTENEDOR INTERNO */}
       <div className="w-full h-full overflow-hidden rounded-sm relative z-0 flex items-center justify-center">
         <motion.div
