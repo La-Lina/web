@@ -23,11 +23,11 @@ export default function ExitAdminButton() {
   };
 
   return (
-    <div className="fixed top-13 left-1/2 -translate-x-1/2 z-[9999] pointer-events-auto">
+    <div className="fixed bottom-4 right-1/2 mr-2 z-[9999] pointer-events-auto">
       <button
         onClick={handleExit}
         disabled={isLoggingOut}
-        className="bg-red-600 hover:bg-red-700 text-white font-bold font-courier-prime text-xs tracking-wider uppercase px-6 py-3 rounded-full shadow-2xl transition-all duration-300 border border-red-500/30 flex items-center gap-2 backdrop-blur-sm hover:scale-105 active:scale-95"
+        className="bg-red-600 hover:bg-red-700 text-white font-bold font-courier-prime text-xs tracking-wider uppercase px-6 py-3.5 rounded-full shadow-2xl transition-all duration-300 border border-red-500/30 flex items-center gap-2 backdrop-blur-sm hover:scale-105 active:scale-95"
       >
         {isLoggingOut ? (
           <>
