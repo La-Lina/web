@@ -10,9 +10,25 @@ export default function AdminLogin() {
   // Nuevos estados para controlar errores y carga
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const mobileDevice = /Android|iPhone|iPad|iPod|Windows Phone|webOS|BlackBerry|IEMobile|Opera Mini/i;
+    setIsMobile(mobileDevice.test(navigator.userAgent) || window.innerWidth < 768);
+  }, []);
 
   // Condición para deshabilitar el botón: campos vacíos o si está cargando
   const isButtonDisabled = !email.trim() || !password.trim() || isLoading;
+
+  if (isMobile === null) return null;
+
+  if (isMobile) {
+    return (
+      <div className="w-screen h-screen bg-black/90 font-courier-prime text-white flex items-center justify-center p-8 text-center">
+        <p>El modo edición solo está disponible desde un PC.</p>
+      </div>
+    );
+  }
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
