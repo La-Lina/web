@@ -27,7 +27,7 @@ export default async function Home() {
         <>
           <Header />
           <Hero mediaData={media} />
-          <About />
+          <About mediaData={media} />
           <Voces mediaData={media} />
           <Highlight mediaData={media} />
           <Contact />
